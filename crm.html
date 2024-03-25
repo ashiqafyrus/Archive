@@ -1,0 +1,100 @@
+{% extends 'crmnavbar.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .container-fluid{
+        background-image: url('{% static "images/crmbg.avif" %}');
+    }
+     /* Custom button style */
+     .btn-custom {
+        background-color: #deeddf; /* Green background */
+        border: none;
+        color: white; /* White text */
+        padding: 15px 32px; /* Padding */
+        text-align: center; /* Text alignment */
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 10px; /* Rounded corners */
+        transition: background-color 0.3s; /* Smooth transition */
+    }
+
+    /* On hover, change the background color */
+    .btn-custom:hover {
+        background-color: #45a049;
+    }
+     /* Custom card style */
+     .card-custom {
+        background-color: #f8f9fa; /* Background color */
+        border-radius: 15px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+        transition: box-shadow 0.3s; /* Smooth transition for shadow */
+    }
+
+    /* On hover, increase the shadow */
+    .card-custom:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+</style>
+<main>
+    <section class="mb-5">
+        <div class="container-fluid" style="text-align: center;">
+            <h1 class="text-white " style="padding-top: 8%;font-size: 5rem;">Archive</h1>
+                    <h5 class="text-white" style="padding-bottom: 8%;">Choose your card.</h5>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row mt-3" id="card-container">
+            {% for app in product %}
+          
+<div class="col-sm-4 mb-3">
+    <div class="card card-custom" draggable="true" ondragstart="drag(event)" ondragend="dragEnd(event)" data-app-id="{{ app.id }}"> <!-- Updated card class -->
+        <div class="card-body">
+            <h1 class="card-title">{{ app.name }}</h1>
+            <hr style="margin: 0 auto 0 0;">
+            <p class="card-text"><b>{{ app.price }}</b></p>
+            <button type="submit" class="btn btn-custom"><a href="#">click here</a></button> <!-- Changed href to '#' -->
+            <div class="delete-icon" style="display: none;">
+                <a href="{% url 'archive_app' app.id  %}" class="delete-link" data-app-id="{{ app.id }}"><i class="fa-solid fa-box-archive" style="color: #000000;font-size: 5rem;"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+            {% endfor %}
+        </div>
+    
+</main>
+<script>
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.dataset.appId);
+        // Show delete icon when dragging starts
+        event.currentTarget.querySelector('.delete-icon').style.display = 'block'; // Use currentTarget to target the card
+    }
+
+    function dragEnd(event) {
+        // Hide delete icon when dragging ends
+        event.currentTarget.querySelector('.delete-icon').style.display = 'none'; // Use currentTarget to target the card
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteLinks = document.querySelectorAll('.delete-link');
+
+        deleteLinks.forEach(link => {
+            link.addEventListener('dragover', function (event) {
+                event.preventDefault();
+            });
+
+            link.addEventListener('drop', function (event) {
+                event.preventDefault();
+                const appId = event.dataTransfer.getData("text");
+                const url = this.getAttribute('href').replace('app_id', appId);
+                // Navigate to the URL
+                window.location.href = url;
+            });
+        });
+    });
+</script>
+{% endblock %}

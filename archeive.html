@@ -1,0 +1,59 @@
+{% extends 'navbar.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .card {
+    background-color: #f8f9fa; /* Card background color */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+    transition: box-shadow 0.3s; /* Smooth transition for shadow */
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.card-title {
+    font-size: 24px; /* Title font size */
+    color: #333; /* Title color */
+}
+
+.card-text {
+    font-size: 18px; /* Text font size */
+    color: #666; /* Text color */
+}
+
+.btn {
+    background-color: #dc3545; /* Button background color */
+    border: none; /* Remove border */
+    color: white; /* Button text color */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Button font size */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.btn:hover {
+    background-color: #c82333; /* Darker background color on hover */
+}
+
+</style>
+<main style="min-height: 100vh;">
+    <div class="container">
+        <div class="row mt-3" style="padding-top: 5%;">
+            {% for i in arch %}
+            <div class="col-sm-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">{{i.app.name}}</h1>
+                        <hr>
+                        <p class="card-text">Rs <b>{{i.app.price}}</b></p>
+                        <button type="submit" class="btn btn-danger"><a href="{% url 'archiveremove' i.id %}" style="color: white; text-decoration: none;">Remove</a></button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}
